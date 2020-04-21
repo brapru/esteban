@@ -13,22 +13,22 @@ def getState(device):
     #return jsonify({'device': device.serialize()})
 
 @proto.route("/api/v1.0/device/led/state/", methods=['POST'])
-def setLed():
+def setLedState():
     data = request.get_json()
     state = data["state"]
 
-    rpi.setLed(state) 
+    rpi.setLedState(state) 
     
     return jsonify({'state': state})
 
     
 @proto.route("/api/v1.0/device/stepper/state/<int:state>", methods=['POST'])
-def setStepper(state):
+def setStepperState(state):
     data = request.get_json()
     state = data["state"]
 
-    rpi.setStepper(state) 
-    rpi.setLed(state)
+    rpi.setStepperState(state) 
+    rpi.setLedState(state)
 
     return jsonify({'state': state})
 
