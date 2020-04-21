@@ -31,12 +31,14 @@ def main():
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
             #spi.writebytes([0])
             #spi.xfer2([0x6F]) # switch it on
-            rpi.setLed(0)
+            rpi.setLed(1)
+            rpi.setStepper(0)
         elif ledstate == "1":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
             #spi.xfer2([0x66]) # switch it on
             #spi.writebytes([1])
-            rpi.setLed(1)
+            rpi.setLed(0)
+            rpi.setStepper(1)
         elif ledstate == "get led":
             rpi.getState("led")
         
