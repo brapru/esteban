@@ -30,6 +30,11 @@ class _SpiCommand:
         data = struct.pack('<BB', cmdType, state) 
         self._prepareToSend(data)
 
+    def createSetStepperCommand(self, state):
+        cmdType = _SpiCommand.LED
+        data = struct.pack('<B', state) 
+        self._prepareToSend(data)
+    
     def createQueryCommand(self, device):
         cmdType = _SpiCommand.QUERY
         data = struct.pack('<Bs',cmdType, device)
@@ -44,11 +49,16 @@ class RpiController:
 
     def _sendCommand(self, cmd):
         self.spi.writebytes(list(cmd.data))
-        print(cmd.data)
+        #print(cmd.data)
 
     def setLed(self, state):
         cmd = _SpiCommand()
         cmd.createSetLedCommand(state)
+        self._sendCommand(cmd)
+
+    def setStepper(self, state):
+        cmd = _SpiCommand()
+        cmd.createSetStepperCommand(state)
         self._sendCommand(cmd)
 
     def getState(self, device):
