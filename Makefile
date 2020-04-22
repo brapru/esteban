@@ -1,7 +1,7 @@
 # Top level Makefile
-#
-# default all
-#
+
+default: all
+
 .DEFAULT:
 		cd mcu && $(MAKE) $@
 

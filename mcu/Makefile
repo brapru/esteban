@@ -24,25 +24,36 @@ INCLUDES = $(INCDIR)
 OBJS  = $(AS_SRC:.s=.o)
 OBJS += $(C_SRC:.c=.o)
 
+RED=\033[0;31m
+GREEN=\033[0;32m
+ORANGE=\033[0;33m
+NC=\033[0m
+
 .PHONY: all
 
 all: $(TARGET).bin
 
 %.o: %.s
-	$(AS) $< -o $@
+	@$(AS) $< -o $@
+	@echo "[$(GREEN)*$(NC)] AS $<"
 
 %.o: %.c
-	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+	@$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+	@echo "[$(GREEN)*$(NC)] CC $<"
 
 $(TARGET).elf: $(OBJS)
-	$(LD) $(LFLAGS) $^ -o $@ 
+	@$(LD) $(LFLAGS) $^ -o $(BINDIR)/$@ 
+	@echo "[$(GREEN)*$(NC)] LD $<"
 
 $(TARGET).bin: $(TARGET).elf
-	$(BIN) -S -O binary $< $@
+	@$(BIN) -S -O binary $(BINDIR)/$< $(BINDIR)/$@
+	@echo "[$(GREEN)*$(NC)] BIN $<"
+	@echo "\n[$(GREEN)*$(NC)] $(TARGET) Successfully Compiled\n[$(GREEN)*$(NC)] Run $(ORANGE)\"make flash\"$(NC) to flash to the MCU via ST-LINK."
 
 clean:
-	rm -rf $(SRCDIR)/*.o $(SRCDIR)/*.elf
-	rm -rf $(BINDIR)/*.elf $(BINDIR)/*.bin
+	@rm -rf $(SRCDIR)/*.o $(SRCDIR)/*.elf
+	@rm -rf $(BINDIR)/*.elf $(BINDIR)/*.bin
+	@echo "[$(GREEN)*$(NC)] All Cleaned Up"
 
 flash:
 	$(STL) write $(BINDIR)/$(TARGET).bin 0x8000000
