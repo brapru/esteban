@@ -13,8 +13,11 @@ class bcolors:
 on = [0x6F, 0x6E, 0xA]
 off = [0x6F, 0x66, 0x66, 0xA]
 
+CLOCK = 0
+COUNTERCLOCK = 1
+
 def instructions():
-    print(f"{bcolors.OKRED}[{bcolors.OKYELL}***{bcolors.OKRED}] SPI Communications Test[{bcolors.OKYELL}***{bcolors.OKRED}]\nEnter 1 to turn ON or 0 for OFF{bcolors.ENDC}")
+    print(f"{bcolors.OKRED}[{bcolors.OKYELL}***{bcolors.OKRED}] SPI Communications Test[{bcolors.OKYELL}***{bcolors.OKRED}]\nEnter 0 to turn ON or 1 for OFF{bcolors.ENDC}")
 
 def main():
 
@@ -27,21 +30,25 @@ def main():
      
         if ledstate == "exit":
             quit()
-        elif ledstate == "0":
-            print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
-            #spi.writebytes([0])
-            #spi.xfer2([0x6F]) # switch it on
-            rpi.setLed(1)
-            rpi.setStepper(0)
-        elif ledstate == "1":
-            print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
-            #spi.xfer2([0x66]) # switch it on
-            #spi.writebytes([1])
-            rpi.setLed(0)
-            rpi.setStepper(1)
-        elif ledstate == "get led":
-            rpi.getState("led")
         
+        elif ledstate == "on":
+            print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
+            rpi.setPumpState(1)
+        
+        elif ledstate == "off":
+            print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
+            rpi.setPumpState(0)
+        
+        elif ledstate == "clock":
+            rpi.setPumpDirection(CLOCK)
+        
+        elif ledstate == "counter":
+            rpi.setPumpDirection(COUNTERCLOCK)
+       
+        elif ledstate == "speed":
+            speed = input("\tset the speed: ")
+            rpi.setPumpSpeed(int(speed))
+
         else:
             numb = 0
 
