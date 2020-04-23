@@ -1,4 +1,4 @@
-TARGET = esteban
+TARGET = blink
 MCU = cortex-m3
 
 CC = arm-none-eabi-gcc

@@ -9,19 +9,30 @@
 void ConfigureRCC(void);
 void ConfigureGPIO(void);
 
+void delay(long cycles){
+        while(cycles>0)
+          cycles--;
+}
+
 void initSPI1Slave(void){
         
         ConfigureRCC();
         ConfigureGPIO();
         ConfigureSPI();
 
+        RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+        GPIOC->CRH = 0x44344444;
+                
 }
 
 int main(void){
         initSPI1Slave();
 
         while(1){
-                __WFI();
+                GPIOC->BSRR = GPIO_BSRR_BS13;
+                delay(50000);
+                GPIOC->BSRR = GPIO_BSRR_BR13;
+                delay(50000);
         }
 }
 

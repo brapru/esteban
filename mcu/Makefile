@@ -18,8 +18,8 @@ CMSIS_DIR = lib/CMSIS
 STDPERIPH_DIR = lib/STM32F10x_StdPeriph_Driver
 
 # Gather all ASM Source Files
-ASOURCES = $(notdir $(wildcard $(SRCDIR)/*.s))
 VPATH := $(SRCDIR):$(SRCDIR)/startups
+ASOURCES = $(notdir $(wildcard $(SRCDIR)/startups/*.s))
 
 
 # Gather CMSIS Source FIles
@@ -52,13 +52,14 @@ MCFLAGS = -mthumb -mcpu=$(MCU)
 DEFS = -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER
 CFLAGS = $(MCFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFS) -ggdb --specs=rdimon.specs
 
-LDSCRIPT = ./ld/linker_script.ld
+LDSCRIPT = ./ld/stm32f10x_linker.ld
 LFLAGS = -T$(LDSCRIPT) $(MCFLAGS) -nostartfiles -lc --specs=nosys.specs
 
 # Most importantly, colorz 
 RED=\033[0;31m
 GREEN=\033[0;32m
 ORANGE=\033[0;33m
+LGREEN=\033[01;32m
 NC=\033[0m
 
 .PHONY: all clean flash erase
@@ -72,7 +73,9 @@ $(BINDIR)/$(TARGET).bin: $(BINDIR)/$(TARGET).elf
 	@echo "\n\t${GREEN}===========================================================${NC}"
 	@echo "\t[${GREEN}*${NC}] \t\t$(TARGET) Build Success! \t\t\t[${GREEN}*${NC}]"
 	@echo "\t[$(GREEN)*$(NC)] Run $(ORANGE)\"make flash\"$(NC) to flash to the MCU via ST-LINK.   [$(GREEN)*$(NC)]"	
-	@echo "\t${GREEN}===========================================================${NC}"
+	@echo "\t[$(ORANGE)*$(NC)] $(ORANGE)Note:$(NC) You may need to run $(ORANGE)\"make erase\"$(NC) to clear     [$(ORANGE)*$(NC)]" 
+	@echo "\t[$(ORANGE)*$(NC)] the MCU before flashing. 				[$(ORANGE)*$(NC)]"
+	@echo "\t${GREEN}===========================================================${NC}\n"
 
 $(BINDIR)/$(TARGET).elf: $(OBJECTS) 
 	@$(CC) $(LFLAGS) $^ -o $@ 
@@ -92,7 +95,7 @@ clean:
 	@rm -rf $(BINDIR)/*.elf $(BINDIR)/*.bin $(OBJDIR)
 	@echo "\t${ORANGE}===========================================${NC}"
 	@echo "\t[${GREEN}*${NC}] \t\tAll Cleaned Up \t\t[${GREEN}*${NC}]"
-	@echo "\t${ORANGE}===========================================${NC}"
+	@echo "\t${ORANGE}===========================================${NC}\n"
 
 flash:
 	$(STL) write $(BINDIR)/$(TARGET).bin 0x8000000
