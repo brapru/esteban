@@ -52,8 +52,8 @@ MCFLAGS = -mthumb -mcpu=$(MCU)
 DEFS = -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER
 CFLAGS = $(MCFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFS) -ggdb --specs=rdimon.specs
 
-LDSCRIPT = ./ld/stm32f10x_linker.ld
-LFLAGS = -T$(LDSCRIPT) $(MCFLAGS) -nostartfiles -lc --specs=nosys.specs
+LDSCRIPT = ./ld/stm32f103c8tx.ld
+LFLAGS = -T$(LDSCRIPT) $(MCFLAGS) -lc --specs=nosys.specs
 
 # Most importantly, colorz 
 RED=\033[0;31m
@@ -96,6 +96,9 @@ clean:
 	@echo "\t${ORANGE}===========================================${NC}"
 	@echo "\t[${GREEN}*${NC}] \t\tAll Cleaned Up \t\t[${GREEN}*${NC}]"
 	@echo "\t${ORANGE}===========================================${NC}\n"
+
+update:
+	$(MAKE) erase && $(MAKE) clean && $(MAKE) && $(MAKE) flash
 
 flash:
 	$(STL) write $(BINDIR)/$(TARGET).bin 0x8000000
