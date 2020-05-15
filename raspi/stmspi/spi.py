@@ -38,7 +38,7 @@ def main():
         elif ledstate == "off":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
             rpi.setPumpState(0)
-        
+
         elif ledstate == "clock":
             rpi.setPumpDirection(CLOCK)
         

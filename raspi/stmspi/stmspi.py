@@ -49,14 +49,13 @@ class _SpiCommand:
         data = struct.pack('<iBB', cmdType, _SpiCommand.DIR, direction)
         self._prepareToSend(data)
 
-
 class RpiController:
     
     def __init__(self, channel):
         self.spi = spidev.SpiDev()
         self.spi.open(0, channel)
-        #self.spi.max_speed_hz = 1000000
-        self.spi.max_speed_hz = 50000
+        #self.spi.max_speed_hz = 10000000 
+        self.spi.max_speed_hz = 10000
 
     def _sendCommand(self, cmd):
         self.spi.writebytes(list(cmd.data))
@@ -88,4 +87,3 @@ class RpiController:
         cmd = _SpiCommand()
         cmd.createSetPumpDirCmd(direction)
         self._sendCommand(cmd)
-

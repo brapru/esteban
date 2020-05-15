@@ -1,18 +1,19 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
+from flask_socketio import SocketIO, emit
 
-from api import rpi
+from api import socketio, rpi, scale_thread, scale_stop_event
 from api.models import Devices
 
-proto = Blueprint('proto', __name__)
+api = Blueprint('api', __name__)
 
 # LED State
-@proto.route("/api/v1.0/device/<string:device>/state", methods=['GET'])
+@api.route("/api/v1.0/device/<string:device>/state", methods=['GET'])
 def getState(device):
     #device = Devices.query.filter_by(deviceName=deviceName).first_or_404()
     rpi.getState(device) 
     #return jsonify({'device': device.serialize()})
 
-@proto.route("/api/v1.0/device/led/state/", methods=['POST'])
+@api.route("/api/v1.0/device/led/state/", methods=['POST'])
 def setLedState():
     data = request.get_json()
     state = data["state"]
@@ -22,7 +23,7 @@ def setLedState():
     return jsonify({'state': state})
 
     
-@proto.route("/api/v1.0/device/stepper/state/<int:state>", methods=['POST'])
+@api.route("/api/v1.0/device/stepper/state/<int:state>", methods=['POST'])
 def setStepperState(state):
     data = request.get_json()
     state = data["state"]
@@ -32,3 +33,7 @@ def setStepperState(state):
 
     return jsonify({'state': state})
 
+
+@api.route("/api/v1.0/test", methods=['GET'])
+def test():
+    return jsonify({'test': 'you got it dude'})
