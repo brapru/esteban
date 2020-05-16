@@ -50,7 +50,7 @@ OBJECTS += $(addsuffix .o,$(addprefix $(OBJDIR)/,$(basename $(ASOURCES))))
 # Flags
 MCFLAGS = -mthumb -mcpu=$(MCU)
 DEFS = -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER
-CFLAGS = $(MCFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFS) -ggdb --specs=rdimon.specs
+CFLAGS = $(MCFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFS) -gdwarf-4 -g3  --specs=rdimon.specs
 
 LDSCRIPT = ./ld/stm32f103c8tx.ld
 LFLAGS = -T$(LDSCRIPT) $(MCFLAGS) -lc --specs=nosys.specs

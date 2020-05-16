@@ -3,6 +3,8 @@
 void initDelay(void){
         SystemCoreClockUpdate();
         SysTick_Config(SystemCoreClock/1000000);
+        
+        NVIC_SetPriority(SysTick_IRQn, 0);
 }
 
 void delay_us(uint32_t us_delay){

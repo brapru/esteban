@@ -3,11 +3,11 @@
 
 void initStepperTimer(void){
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-        
+       
         TIM_TimeBaseInitTypeDef timerInitStruct;
-        timerInitStruct.TIM_Prescaler = 40000;
+        timerInitStruct.TIM_Prescaler = 48;
         timerInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
-        timerInitStruct.TIM_Period = 500;
+        timerInitStruct.TIM_Period = 0;
         timerInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
         timerInitStruct.TIM_RepetitionCounter = 0;
 
@@ -17,29 +17,33 @@ void initStepperTimer(void){
 
 void initStepperPWMChannel(void){
 	
-	TIM_OCInitTypeDef timerOCInitStruct = {0,};
+	TIM_OCInitTypeDef timerOCInitStruct;
 	
 	timerOCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
-	timerOCInitStruct.TIM_Pulse = 400;
+	timerOCInitStruct.TIM_Pulse = 1000;
 	timerOCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
 	timerOCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
-	
+        timerOCInitStruct.TIM_OCNPolarity = TIM_OCNPolarity_Low;
+        timerOCInitStruct.TIM_OCIdleState =TIM_OCIdleState_Reset;
+        timerOCInitStruct.TIM_OCNIdleState =TIM_OCNIdleState_Set;
+
 	TIM_OC1Init(TIM4, &timerOCInitStruct);
 	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
-    
 }
 
 void initStepperGPIO(void){
         
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
 
         GPIO_InitTypeDef GPIO_InitStructure;
         
         GPIO_InitStructure.GPIO_Pin = STEPPER_STEP | STEPPER_DIR;
         GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-        
-        GPIO_Init(GPIOB, &GPIO_InitStructure);
+        //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+        GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+       
+        //GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_2); 
+        GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
 void stepTest(void){

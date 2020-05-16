@@ -2,6 +2,7 @@
 #define __UTILS_H
 
 #include "stm32f10x.h"
+#include "misc.h"
 
 __IO uint32_t time_us, time_ms;
 
