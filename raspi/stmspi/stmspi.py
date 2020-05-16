@@ -1,89 +1,55 @@
 import spidev
 import struct
 
-class _SpiCommand:
+class RpiController:
 
-    # Set the type of command as first byte so MCU knows what to expect
-    LED = 1
-    PUMP = 2
-    STEPPER = 3
+    def __init__(self, channel):
+        self.spi = spidev.SpiDev()
+        self.spi.open(0, channel)
+        self.spi.max_speed_hz = 10000
 
-    STATE = 4
-    SPEED = 5
-    DIR = 6
+        self.__STATE = 1
+        self.__SPEED = 2
+        self.__DIR = 3
 
-    # Query the MCU to check state of device
-    QUERY = 8
-
-    # Emergency Abort Command. Halt everything.
-    ABORT = 9
+        self.led            = { "id" : 1, "state" : 0 }
+        self.peristaltic    = { "id" : 2, "state" : 0, "direction" : 0, "speed" : 0 }
+        self.stepper        = { "id" : 3, "state" : 0, "direction" : 0, "speed" : 0 }
 
     def _prepareToSend(self, data):
         self.data = bytearray(data)
         self.data.append(0xFF)
 
-    def createSetLedCommand(self, state):
-        cmdType = _SpiCommand.LED
-        data = struct.pack('<iB', cmdType, state) 
-        self._prepareToSend(data)
+    def _createCommand(self, device, setting, update):
+        data = struct.pack('<iBB', device, setting, update)
+        self._prepareToSend(data) 
+
+    def _spiWrite(self, cmd):
+        self.spi.writebytes(list(self.data))
+        print(self.data)
+        print(list(self.data))
+
+    def sendToMCU(self, device, setting, update):
+        cmd = self._createCommand(device, setting, update)
+        self._spiWrite(cmd)
+
+    def getDeviceStatus(self, device):
+        return device
+
+    def setDeviceState(self, device, updated_state):
+        if updated_state != 0 and updated_state != 1:
+            raise ValueError("Invalid state. Device can only be ON(1) OR OFF(0)")
+        
+        device.update(state=updated_state)
+        self.sendToMCU(device["id"], self.__STATE, device["state"])
     
-    def createQueryCommand(self, device):
-        cmdType = _SpiCommand.QUERY
-        data = struct.pack('<Bs',cmdType, device)
-        self._prepareToSend(data)
+    def setDeviceDirection(self, device, updated_direction):
+        if updated_direction != 0 and updated_direction != 1:
+            raise ValueError("Invalid direction. Device can only be CLOCK(1) OR COUNTER(0)")
+        
+        device.update(direction=updated_direction)
+        self.sendToMCU(device["id"], self.__DIR, device["direction"])
 
-    """ Peristaltic Pump Command Functions """
-    
-    def createSetPumpStateCmd(self, state):
-        cmdType = _SpiCommand.PUMP
-        data = struct.pack('<iBB', cmdType, _SpiCommand.STATE, state) 
-        self._prepareToSend(data)
-   
-    def createSetPumpSpeedCmd(self, speed):
-        cmdType = _SpiCommand.PUMP
-        data = struct.pack('<iBB', cmdType, _SpiCommand.SPEED, speed) 
-        self._prepareToSend(data)
-   
-    def createSetPumpDirCmd(self, direction):
-        cmdType = _SpiCommand.PUMP
-        data = struct.pack('<iBB', cmdType, _SpiCommand.DIR, direction)
-        self._prepareToSend(data)
-
-class RpiController:
-    
-    def __init__(self, channel):
-        self.spi = spidev.SpiDev()
-        self.spi.open(0, channel)
-        #self.spi.max_speed_hz = 10000000 
-        self.spi.max_speed_hz = 10000
-
-    def _sendCommand(self, cmd):
-        self.spi.writebytes(list(cmd.data))
-        print(cmd.data)
-        print(list(cmd.data))
-
-    def getState(self, device):
-        cmd = _SpiCommand()
-        cmd.createQueryCommand(device)
-        self._sendCommand(cmd)
-    
-    def setLedState(self, state):
-        cmd = _SpiCommand()
-        cmd.createSetLedCommand(state)
-        self._sendCommand(cmd)
-
-    """ Function Calls - Peristaltic Pump """
-    def setPumpState(self, state):
-        cmd = _SpiCommand()
-        cmd.createSetPumpStateCmd(state)
-        self._sendCommand(cmd)
-   
-    def setPumpSpeed(self, speed):
-        cmd = _SpiCommand()
-        cmd.createSetPumpSpeedCmd(speed)
-        self._sendCommand(cmd)
-
-    def setPumpDirection(self, direction):
-        cmd = _SpiCommand()
-        cmd.createSetPumpDirCmd(direction)
-        self._sendCommand(cmd)
+    def setDeviceSpeed(self, device, updated_speed):
+        device.update(speed=updated_speed)
+        self.sendToMCU(device["id"], self.__SPEED, device["speed"])

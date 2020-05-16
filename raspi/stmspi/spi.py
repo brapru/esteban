@@ -10,11 +10,10 @@ class bcolors:
     ENDC = '\033[0m'
 
 
-on = [0x6F, 0x6E, 0xA]
-off = [0x6F, 0x66, 0x66, 0xA]
-
+ON = 1
+OFF = 0
 CLOCK = 0
-COUNTERCLOCK = 1
+COUNTER = 1
 
 def instructions():
     print(f"{bcolors.OKRED}[{bcolors.OKYELL}***{bcolors.OKRED}] SPI Communications Test[{bcolors.OKYELL}***{bcolors.OKRED}]\nEnter 0 to turn ON or 1 for OFF{bcolors.ENDC}")
@@ -33,21 +32,25 @@ def main():
         
         elif ledstate == "on":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
-            rpi.setPumpState(1)
-        
+            rpi.setDeviceState(rpi.led, ON)
+
         elif ledstate == "off":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
-            rpi.setPumpState(0)
+            rpi.setDeviceState(rpi.led, OFF)
 
         elif ledstate == "clock":
-            rpi.setPumpDirection(CLOCK)
-        
+            rpi.setDeviceDirection(rpi.peristaltic, CLOCK)
+
         elif ledstate == "counter":
-            rpi.setPumpDirection(COUNTERCLOCK)
-       
+            print(COUNTER)
+            rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
+
         elif ledstate == "speed":
             speed = input("\tset the speed: ")
-            rpi.setPumpSpeed(int(speed))
+            rpi.setDeviceSpeed(rpi.peristaltic, int(speed))
+
+        elif ledstate == "status":
+            print(rpi.getDeviceStatus(rpi.led))
 
         else:
             numb = 0
