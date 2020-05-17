@@ -90,8 +90,6 @@ void initSpiInterrupt(void){
         NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
         NVIC_Init(&NVIC_InitStructure); 
 
-        /* BE SURE AND LOOK HERE WHEN YOU RUN TESTS TOMORROW BECAUSE IT MIGHT
-         * SCREW UP SOME ISH */
         NVIC_SetPriority(DMA1_Channel2_IRQn, 8);
 }
 
