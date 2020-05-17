@@ -18,10 +18,12 @@ int main(void){
         
         initSpiSlave();
 
+        initStepper();
+
         while(1){
-                GPIOC->BSRR = GPIO_BSRR_BS13;
-                delay_ms(100);
-                GPIOC->BSRR = GPIO_BSRR_BR13;
-                delay_ms(100);
+                //GPIOC->BSRR = GPIO_BSRR_BS13;
+                //delay_ms(100);
+                //GPIOC->BSRR = GPIO_BSRR_BR13;
+                //delay_ms(100);
         }
 }

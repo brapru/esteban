@@ -5,12 +5,17 @@
 #include "stm32f10x_tim.h"
 #include "stm32f10x_rcc.h"
 
-#define STEPPER_DIR GPIO_Pin_8
-#define STEPPER_STEP GPIO_Pin_9
+#define STEPPER_DIR GPIO_Pin_5
+#define STEPPER_STEP GPIO_Pin_6
 #define CLOCK Bit_SET
 #define COUNTER Bit_RESET
 
-void initStepperTimer(void);
+#define MAX_RELOAD      0xFFFF
+
+void initStepper(void);
+
+void initStepperRCC(void);
+void initStepperTimer(uint16_t frequency, uint16_t duty);
 void initStepperPWMChannel(void);
 void initStepperGPIO(void);
 

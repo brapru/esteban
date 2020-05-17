@@ -23,7 +23,7 @@ def main():
     instructions()
 
     rpi = stm.RpiController(0)
-
+    
     while True:
         ledstate = input("brapru> ")
      
@@ -33,6 +33,7 @@ def main():
         elif ledstate == "on":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
             rpi.setDeviceState(rpi.led, ON)
+<<<<<<< HEAD
 
         elif ledstate == "off":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
@@ -51,6 +52,23 @@ def main():
 
         elif ledstate == "status":
             print(rpi.getDeviceStatus(rpi.led))
+=======
+        
+        elif ledstate == "off":
+            print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
+            rpi.setDeviceState(rpi.led, OFF)
+        
+        elif ledstate == "clock":
+            rpi.setDeviceDirection(rpi.peristaltic, CLOCK)
+        
+        elif ledstate == "counter":
+            rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
+       
+        elif ledstate == "speed":
+            speed = input("\tset the speed: ")
+            print(type(speed))
+            #rpi.setDeviceSpeed(rpi.peristaltic, int(speed))
+>>>>>>> development
 
         else:
             numb = 0

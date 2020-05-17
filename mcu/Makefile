@@ -48,12 +48,12 @@ OBJECTS = $(addsuffix .o,$(addprefix $(OBJDIR)/,$(basename $(CSOURCES))))
 OBJECTS += $(addsuffix .o,$(addprefix $(OBJDIR)/,$(basename $(ASOURCES))))
 
 # Flags
-MCFLAGS = -mthumb -mcpu=$(MCU)
+MCFLAGS = -mthumb -mcpu=$(MCU) -mfloat-abi=soft 
 DEFS = -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER
-CFLAGS = $(MCFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFS) -gdwarf-4 -g3  --specs=rdimon.specs
+CFLAGS = $(MCFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) $(DEFS) -gdwarf-4 -g3  --specs=rdimon.specs --specs=nosys.specs 
 
 LDSCRIPT = ./ld/stm32f103c8tx.ld
-LFLAGS = -T$(LDSCRIPT) $(MCFLAGS) -lc --specs=nosys.specs
+LFLAGS = -T$(LDSCRIPT) $(MCFLAGS) --specs=rdimon.specs --specs=nosys.specs
 
 # Most importantly, colorz 
 RED=\033[0;31m
