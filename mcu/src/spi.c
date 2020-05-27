@@ -4,7 +4,9 @@
 #include "stm32f10x_rcc.h"
 #include "misc.h"
 
+#include "commands.h"
 #include "spi.h"
+#include "stepper.h"
 #include "utils.h"
 
 /* Private Variables  */
@@ -13,7 +15,10 @@ SPI_InitTypeDef SPI_InitStructure;
 NVIC_InitTypeDef NVIC_InitStructure;
 
 uint8_t SPI_SLAVE_Buffer_Rx[BUFFERSIZE];
-uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE];
+//uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE];
+uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07};
+
+static struct command cmd = { 0, 0, 0 };
 
 void initSpiRCC(void){
        
@@ -126,16 +131,20 @@ void initSpiSlave(void){
         /* Enable the DMA channels */
         DMA_Cmd(SPI_SLAVE_Rx_DMA_Channel, ENABLE);
         DMA_Cmd(SPI_SLAVE_Tx_DMA_Channel, ENABLE);
+
 }
 
 
 /* Interrupt Handler Function */
 void resetDMA(void){
-        delay_us(1000000 / 50000);
+        delay_us(20);
         while ((SPI1->SR & SPI_I2S_FLAG_RXNE) != 0) {
                 SPI_I2S_ReceiveData(SPI_SLAVE);
-                delay_us(1000000 / 50000);
+                delay_us(20);
         }
+
+        //SPI_SLAVE_Buffer_Tx[0] = 0x1;
+        //while(!DMA_GetFlagStatus(SPI_SLAVE_Tx_DMA_FLAG));
 
         DMA_Cmd(SPI_SLAVE_Rx_DMA_Channel, DISABLE);
         SPI_SLAVE_Rx_DMA_Channel->CMAR = (uint32_t)&SPI_SLAVE_Buffer_Rx;
@@ -150,13 +159,42 @@ void DMA1_Channel2_IRQHandler(void){
        
         DMA_ClearITPendingBit(DMA1_IT_GL2 | DMA1_IT_TC2 | DMA1_IT_HT2 | DMA1_IT_TE2);
 
+        parseCommand(SPI_SLAVE_Buffer_Rx, &cmd);
+     
+        // Always check for abort or emergency calls first
+
+        // struct device *device = getDeviceFromID(cmd.deviceID) 
+        //switch (cmd.deviceID){
+        //        case LED:       return &deviceLED; break;
+        //        case PUMP:      return &devicePUMP; break;
+        //}
+
+        // if command type is getinfo
+                //device->response = getDeviceInfo();
+
+        // if command type is change a setting, fire off the command function
+                //device->updateSettings(&cmd);
+
+        // if response required bit set, set TX buffer
+                // Set the TX buffer = device->response;
+
+        // Cleanup and reset
+
         if (state == 0){
                 GPIOC->BSRR = GPIO_BSRR_BR13; 
                 state = 1;
+                TIM_Cmd(TIM4, DISABLE);
+                delay_ms(100);
+                GPIO_WriteBit(GPIOB, STEPPER_DIR, Bit_RESET);
+                TIM_Cmd(TIM4, ENABLE);
         }
         else{
                 GPIOC->BSRR |= GPIO_BSRR_BS13;
-                state = 0;                
+                state = 0;
+                TIM_Cmd(TIM4, DISABLE);
+                delay_ms(100);                
+                GPIO_WriteBit(GPIOB, STEPPER_DIR, Bit_SET);
+                TIM_Cmd(TIM4, ENABLE);
         }
 
         resetDMA();

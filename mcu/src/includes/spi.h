@@ -29,10 +29,11 @@
 #define SPI_SLAVE_DMA_CLK               RCC_AHBPeriph_DMA1
 #define SPI_SLAVE_Rx_DMA_Channel        DMA1_Channel2
 #define SPI_SLAVE_Tx_DMA_Channel        DMA1_Channel3
+#define SPI_SLAVE_Tx_DMA_FLAG           DMA1_FLAG_TC3
 #define SPI_SLAVE_DR_Base               0x4001300C
 #define SPI_SLAVE_IRQn                  SPI1_IRQn
 
-#define BUFFERSIZE                      7
+#define BUFFERSIZE                      11
 
 void initSpiRCC(void);
 void initSpiGPIO(void);
