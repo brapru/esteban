@@ -33,6 +33,7 @@ def main():
         elif ledstate == "on":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
             rpi.setDeviceState(rpi.led, ON)
+            rpi._spiRead(7)
 
         elif ledstate == "off":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
@@ -42,7 +43,6 @@ def main():
             rpi.setDeviceDirection(rpi.peristaltic, CLOCK)
 
         elif ledstate == "counter":
-            print(COUNTER)
             rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
 
         elif ledstate == "speed":
