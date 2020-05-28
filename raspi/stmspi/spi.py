@@ -10,8 +10,8 @@ class bcolors:
     ENDC = '\033[0m'
 
 
-ON = 1
-OFF = 0
+ON = 0
+OFF = 1
 CLOCK = 0
 COUNTER = 1
 

@@ -16,9 +16,9 @@ class RpiController:
         self.__INFO         = bytes("*","utf-8")
         self.__SEPARATOR    = bytes(":","utf-8")
 
-        self.led            = { "id" : "LED", "state" : 0 }
-        self.peristaltic    = { "id" : "PER", "state" : 0, "direction" : 0, "speed" : 0 }
-        self.stepper        = { "id" : "STP", "state" : 0, "direction" : 0, "speed" : 0 }
+        self.led            = { "id" : 1, "state" : 0 }
+        self.peristaltic    = { "id" : 2, "state" : 0, "direction" : 0, "speed" : 0 }
+        self.stepper        = { "id" : 3, "state" : 0, "direction" : 0, "speed" : 0 }
 
     def _prepareToSend(self, data):
         self.data = bytearray(data)
@@ -27,8 +27,8 @@ class RpiController:
         print(len(self.data))
 
     def _createCommand(self, cmdtype, device, setting, update):
-        device = bytes(device, 'utf-8')
-        data = struct.pack('<c3scBcB', cmdtype, device, self.__SEPARATOR, setting, self.__SEPARATOR, update)
+        #device = bytes(device, 'utf-8')
+        data = struct.pack('<cBcBcB', cmdtype, device, self.__SEPARATOR, setting, self.__SEPARATOR, update)
         self._prepareToSend(data) 
 
     def _spiRead(self, msg_len):
