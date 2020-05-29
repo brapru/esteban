@@ -35,12 +35,11 @@ def create_app():
     socketio.init_app(app)
     return app
 
+
+### Initalize 
 db = SQLAlchemy()
 rpi = stm.RpiController(0)
-
 scale_thread = Thread()
 scale_stop_event = Event()
-
 socketio = SocketIO()
-
 hx = init_hx()

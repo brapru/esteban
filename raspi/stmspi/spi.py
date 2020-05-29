@@ -10,8 +10,8 @@ class bcolors:
     ENDC = '\033[0m'
 
 
-ON = 1
-OFF = 0
+ON = 0
+OFF = 1
 CLOCK = 0
 COUNTER = 1
 
@@ -34,6 +34,10 @@ def main():
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
             rpi.setDeviceState(rpi.led, ON)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            rpi._spiRead(7)
+>>>>>>> raspidevelopment
 
         elif ledstate == "off":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
@@ -43,7 +47,6 @@ def main():
             rpi.setDeviceDirection(rpi.peristaltic, CLOCK)
 
         elif ledstate == "counter":
-            print(COUNTER)
             rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
 
         elif ledstate == "speed":
