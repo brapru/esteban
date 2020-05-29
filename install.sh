@@ -23,6 +23,13 @@ function outro {
         echo -e "\t---------${NC}\n"
 }
 
+function environment {
+        if ! [[ "$OSTYPE" == "darwin"* ]]; then
+                echo -e "[${RED}!${NC}] Installation script only tested MacOS."
+                exit 1; 
+        fi
+}
+
 tool_exists(){
 	command -v "$1" >/dev/null 2>&1;
 }
@@ -32,7 +39,7 @@ function check_brew {
         if tool_exists brew; then        
         	echo -e "[${GREEN}-${NC}] Brew installed."
 	else
-		echo "[${RED}!${NC}] Hombrew not installed. Grabbing the latest version."
+		echo -e "[${RED}!${NC}] Hombrew not installed. Grabbing the latest version."
         	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 	fi
         echo -e "[${GREEN}*${NC}] Brew setup complete"      
@@ -93,6 +100,7 @@ function check_telnet {
 
 function main {
         intro
+        environment
         check_brew
 	check_arm
 	check_stlink
