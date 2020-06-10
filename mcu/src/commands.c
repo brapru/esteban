@@ -1,7 +1,6 @@
 #include "commands.h"
 
 void parseCommand(uint8_t *buffer, struct command *cmd){
-
         cmd->type = buffer[0];
         
         // Check if cmd->type is of valid type before setting to variable
@@ -19,11 +18,9 @@ void parseCommand(uint8_t *buffer, struct command *cmd){
 
         cmd->setting = buffer[3];
         cmd->update = buffer[5];
-
 }
 
 void handleCommand(struct command *cmd){
-        
         struct device *device = getDeviceFromID(cmd->device_id);
 
         switch(cmd->setting){
@@ -45,11 +42,9 @@ void handleCommand(struct command *cmd){
 }
 
 void resetCommand(struct command *cmd){
-        
         cmd->type = NONE;
         cmd->device_id = NONE;
         cmd->setting = NONE;
         cmd->update= NONE;
         cmd->response = "";
-
 }

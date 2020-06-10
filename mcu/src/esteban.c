@@ -12,15 +12,12 @@ struct controller esteban;
 /* === Initialization Fuction Declarations === */
 
 void initController(void){
-        
         createNewDevice(&esteban.pump, PUMPID, OFF, 0, 0, changePumpState, changePumpDirection, changePumpSpeed); 
         createNewDevice(&esteban.led, LEDID, OFF, 0, 0, changeLedState, NULL, NULL);
-
 }
 
 
 int main(void){
-        
         /* Debug for on board led */
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
         GPIOC->CRH = 0x44344444;
@@ -35,5 +32,4 @@ int main(void){
         initController();
 
         while(1){}
-
 }
