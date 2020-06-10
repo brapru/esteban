@@ -33,21 +33,17 @@ def main():
         elif ledstate == "on":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKGREEN}ON{bcolors.ENDC}")
             rpi.setDeviceState(rpi.led, ON)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             rpi._spiRead(7)
->>>>>>> raspidevelopment
 
         elif ledstate == "off":
             print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
             rpi.setDeviceState(rpi.led, OFF)
 
-        elif ledstate == "clock":
-            rpi.setDeviceDirection(rpi.peristaltic, CLOCK)
+        elif ledstate == "pump on":
+            rpi.setDeviceState(rpi.peristaltic, OFF)
 
-        elif ledstate == "counter":
-            rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
+        elif ledstate == "pump off":
+            rpi.setDeviceState(rpi.peristaltic, ON)
 
         elif ledstate == "speed":
             speed = input("\tset the speed: ")
@@ -55,11 +51,6 @@ def main():
 
         elif ledstate == "status":
             print(rpi.getDeviceStatus(rpi.led))
-=======
-        
-        elif ledstate == "off":
-            print(f"{bcolors.OKRED}[{bcolors.OKYELL}*{bcolors.OKRED}]{bcolors.ENDC} LED: {bcolors.OKRED}OFF{bcolors.ENDC}")
-            rpi.setDeviceState(rpi.led, OFF)
         
         elif ledstate == "clock":
             rpi.setDeviceDirection(rpi.peristaltic, CLOCK)
@@ -67,12 +58,6 @@ def main():
         elif ledstate == "counter":
             rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
        
-        elif ledstate == "speed":
-            speed = input("\tset the speed: ")
-            print(type(speed))
-            #rpi.setDeviceSpeed(rpi.peristaltic, int(speed))
->>>>>>> development
-
         else:
             numb = 0
 
