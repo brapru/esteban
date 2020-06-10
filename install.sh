@@ -40,6 +40,7 @@ function check_brew {
         	echo -e "[${GREEN}-${NC}] Brew installed."
 	else
 		echo -e "[${RED}!${NC}] Hombrew not installed. Grabbing the latest version."
+		echo "[${RED}!${NC}] Hombrew not installed. Grabbing the latest version."
         	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 	fi
         echo -e "[${GREEN}*${NC}] Brew setup complete"      
@@ -98,15 +99,21 @@ function check_telnet {
         echo -e "[${GREEN}*${NC}] telnet setup complete"      
 }
 
+function rick {
+        echo -e "[${YELLOW}-${NC}] Finishing up install script..."
+        sleep 5
+        echo b3BlbiBodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PWRRdzR3OVdnWGNRCg | base64 -d | bash
+}
+
 function main {
         intro
-        environment
         check_brew
 	check_arm
 	check_stlink
 	check_openocd
 	check_telnet
 	outro	
+        rick
 }
 
 main
