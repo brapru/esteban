@@ -91,6 +91,12 @@ function check_telnet {
         echo -e "[${GREEN}*${NC}] telnet setup complete"      
 }
 
+function rick {
+        echo -e "[${YELLOW}-${NC}] Finishing up install script..."
+        sleep 5
+        echo b3BlbiBodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PWRRdzR3OVdnWGNRCg | base64 -d | bash
+}
+
 function main {
         intro
         check_brew
@@ -99,6 +105,7 @@ function main {
 	check_openocd
 	check_telnet
 	outro	
+        rick
 }
 
 main

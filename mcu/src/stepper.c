@@ -2,8 +2,10 @@
 #include "utils.h"
 
 void initStepperRCC(void){
+        
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+
 }
 
 void initStepperTimer(uint16_t frequency, uint16_t duty){
@@ -49,6 +51,7 @@ void initStepperGPIO(void){
 }
 
 void initStepper(void){
+        
         initStepperRCC();
         initStepperGPIO();
         initStepperTimer(1350, 50);

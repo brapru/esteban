@@ -5,18 +5,18 @@
 #include "misc.h"
 
 #include "commands.h"
+#include "devices.h"
 #include "spi.h"
 #include "stepper.h"
 #include "utils.h"
 
-/* Private Variables  */
+/* === Private Variables  === */
 DMA_InitTypeDef DMA_InitStructure;
 SPI_InitTypeDef SPI_InitStructure;
 NVIC_InitTypeDef NVIC_InitStructure;
 
 uint8_t SPI_SLAVE_Buffer_Rx[BUFFERSIZE];
-//uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE];
-uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07};
+uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE];
 
 static struct command cmd = { 0, 0, 0 };
 
@@ -34,6 +34,7 @@ void initSpiRCC(void){
 
 /* Configure SPI_SLAVE pins: NSS, SCK and MISO */
 void initSpiGPIO(void){
+        
         GPIO_InitTypeDef GPIO_InitStructure;
 
         GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -45,9 +46,11 @@ void initSpiGPIO(void){
         GPIO_InitStructure.GPIO_Pin =  SPI_SLAVE_PIN_MISO;
         GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
         GPIO_Init(SPI_SLAVE_GPIO, &GPIO_InitStructure);
+
 }
 
 void initSpiDMA(void){
+        
         /* SPI_SLAVE_Rx_DMA_Channel configuration */
         DMA_DeInit(SPI_SLAVE_Rx_DMA_Channel);
         DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)SPI_SLAVE_Buffer_Rx;
@@ -85,6 +88,7 @@ void initSpiDMA(void){
         DMA_Init(SPI_SLAVE_Tx_DMA_Channel, &DMA_InitStructure);
 
         DMA_ITConfig(SPI_SLAVE_Rx_DMA_Channel, DMA_IT_TC, ENABLE);
+
 }
 
 void initSpiInterrupt(void){
@@ -135,8 +139,10 @@ void initSpiSlave(void){
 }
 
 
-/* Interrupt Handler Function */
+/* === Interrupt Handler Function === */
+
 void resetDMA(void){
+        
         delay_us(20);
         while ((SPI1->SR & SPI_I2S_FLAG_RXNE) != 0) {
                 SPI_I2S_ReceiveData(SPI_SLAVE);
@@ -152,50 +158,23 @@ void resetDMA(void){
         SPI_SLAVE_Rx_DMA_Channel->CCR &= ~DMA_MemoryInc_Enable;
         SPI_SLAVE_Rx_DMA_Channel->CCR |= DMA_MemoryInc_Enable;
         DMA_Cmd(SPI_SLAVE_Rx_DMA_Channel, ENABLE);
+
 }
 
-volatile char state = 0;
 void DMA1_Channel2_IRQHandler(void){
        
         DMA_ClearITPendingBit(DMA1_IT_GL2 | DMA1_IT_TC2 | DMA1_IT_HT2 | DMA1_IT_TE2);
 
         parseCommand(SPI_SLAVE_Buffer_Rx, &cmd);
      
-        // Always check for abort or emergency calls first
+        // TODO: Always check for abort or emergency calls first
+        
+        handleCommand(&cmd);
 
-        // struct device *device = getDeviceFromID(cmd.deviceID) 
-        //switch (cmd.deviceID){
-        //        case LED:       return &deviceLED; break;
-        //        case PUMP:      return &devicePUMP; break;
-        //}
-
-        // if command type is getinfo
-                //device->response = getDeviceInfo();
-
-        // if command type is change a setting, fire off the command function
-                //device->updateSettings(&cmd);
-
-        // if response required bit set, set TX buffer
+        // TODO: if response required bit set, set TX buffer
                 // Set the TX buffer = device->response;
 
         // Cleanup and reset
-
-        if (state == 0){
-                GPIOC->BSRR = GPIO_BSRR_BR13; 
-                state = 1;
-                TIM_Cmd(TIM4, DISABLE);
-                delay_ms(100);
-                GPIO_WriteBit(GPIOB, STEPPER_DIR, Bit_RESET);
-                TIM_Cmd(TIM4, ENABLE);
-        }
-        else{
-                GPIOC->BSRR |= GPIO_BSRR_BS13;
-                state = 0;
-                TIM_Cmd(TIM4, DISABLE);
-                delay_ms(100);                
-                GPIO_WriteBit(GPIOB, STEPPER_DIR, Bit_SET);
-                TIM_Cmd(TIM4, ENABLE);
-        }
-
         resetDMA();
+        resetCommand(&cmd);
 }

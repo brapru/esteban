@@ -2,10 +2,11 @@
 #define __COMMANDS_H
 
 #include "stm32f10x.h"
-
+#include "devices.h"
 
 #define DEVICE_ID_SIZE          3
 #define BUFFERSIZE              11
+#define RESPONSESIZE            8
 
 #define NONE                    0
 #define STATE                   1
@@ -16,17 +17,23 @@
 #define INFO_COMMAND_TYPE       '*' 
 #define ERROR_COMMAND_TYPE      '-'
 
+struct command;
+struct device;
+
 struct command {
+        
         uint8_t type;
 
-        char deviceID[4]; /* 3 letter unique device identifier */
+        uint8_t device_id; /* Numeric unique device identifier */
         uint8_t setting;
         uint8_t update;
 
-        //bool responseRequired;
-        //char *response;
+        char *response;
+
 };
 
 void parseCommand(uint8_t *buffer, struct command *cmd);
+void handleCommand(struct command *cmd);
+void resetCommand(struct command *cmd);
 
 #endif
