@@ -9,7 +9,6 @@ api = Blueprint('api', __name__)
 # LED State
 @api.route("/api/v1.0/device/<string:device>/state", methods=['GET'])
 def getState(device):
-    #device = Devices.query.filter_by(deviceName=deviceName).first_or_404()
     rpi.getState(device) 
     #return jsonify({'device': device.serialize()})
 
