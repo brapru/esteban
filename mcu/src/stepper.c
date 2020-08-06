@@ -54,7 +54,7 @@ void initStepper(void){
         
         initStepperRCC();
         initStepperGPIO();
-        initStepperTimer(1350, 50);
+        initStepperTimer(100, 50);
 
         GPIO_WriteBit(GPIOB, STEPPER_DIR, Bit_SET);
 }
