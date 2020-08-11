@@ -18,7 +18,7 @@ class RpiController:
 
         self.led            = { "id" : 1, "state" : 0 }
         self.peristaltic    = { "id" : 2, "state" : 0, "direction" : 0, "speed" : 0 }
-        self.stepper        = { "id" : 3, "state" : 0, "direction" : 0, "speed" : 0 }
+        self.boiler         = { "id" : 3, "state" : 0 }
 
     def _prepareToSend(self, data):
         self.data = bytearray(data)
