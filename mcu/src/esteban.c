@@ -14,6 +14,7 @@ struct controller esteban;
 void initController(void){
         createNewDevice(&esteban.pump, PUMPID, OFF, 0, 0, changePumpState, changePumpDirection, changePumpSpeed); 
         createNewDevice(&esteban.led, LEDID, OFF, 0, 0, changeLedState, NULL, NULL);
+        createNewDevice(&esteban.boiler, BOILERID, OFF, 0, 0, changeBoilerState, NULL, NULL);
 }
 
 
@@ -29,7 +30,10 @@ int main(void){
 
         initStepper();
 
+        initBoiler();
+
         initController();
 
-        while(1){}
+        while(1){
+        }
 }
