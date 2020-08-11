@@ -16,8 +16,9 @@ void createNewDevice(struct device *device, uint8_t id, uint8_t state, uint8_t d
 
 struct device *getDeviceFromID(uint8_t id){
         switch(id){
-                case LEDID:    return &esteban.led;  break;
-                case PUMPID:   return &esteban.pump; break;
+                case LEDID:     return &esteban.led;    break;
+                case PUMPID:    return &esteban.pump;   break;
+                case BOILERID:  return &esteban.boiler; break;
         }
 }
 

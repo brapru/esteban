@@ -6,12 +6,13 @@
 #include "spi.h"
 #include "stepper.h"
 #include "utils.h"
+#include "boiler.h"
 
 struct controller {
         
         struct device led;
         struct device pump;
-
+        struct device boiler;
 };
 
 /* === Externs === */

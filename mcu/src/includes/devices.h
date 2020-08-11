@@ -8,6 +8,7 @@
 
 #define LEDID           1
 #define PUMPID          2
+#define BOILERID        3
 
 #define SPEEDLOW        1       
 #define SPEEDMID        2
