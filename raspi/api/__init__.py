@@ -6,6 +6,7 @@ from threading import Thread, Event
 
 import stmspi.stmspi as stm
 from loadcell.hx711 import HX711
+from tempsensor.ds18b20 import DS18B20
 
 def init_hx():
     hx = HX711(5,6)
@@ -39,7 +40,13 @@ def create_app():
 ### Initalize 
 db = SQLAlchemy()
 rpi = stm.RpiController(0)
+
 scale_thread = Thread()
 scale_stop_event = Event()
-socketio = SocketIO()
 hx = init_hx()
+
+temp_thread = Thread()
+temp_stop_event = Event()
+tempsensor = DS18B20("F") 
+
+socketio = SocketIO()

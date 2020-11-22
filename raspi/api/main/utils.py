@@ -1,5 +1,5 @@
 from flask_socketio import SocketIO, emit
-from api import hx, socketio, rpi, scale_thread, scale_stop_event
+from api import hx, socketio, scale_stop_event, tempsensor, temp_stop_event
 
 from random import random
 from time import sleep
@@ -12,4 +12,10 @@ def sendWeightToClient():
             hx.power_down()
             hx.power_up()
             
+            socketio.sleep(.5) 
+
+def sendTempToClient():
+    while not scale_stop_event.isSet():
+            temp = tempsensor.get_water_temp() 
+            socketio.emit('temp_update', temp, namespace='/temp')
             socketio.sleep(.5) 
