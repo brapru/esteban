@@ -11,7 +11,7 @@ def init_hx():
     hx = HX711(5,6)
     
     hx.set_reading_format("MSB", "MSB")
-    hx.set_reference_unit(535)
+    hx.set_reference_unit(-519)
 
     hx.reset()
     hx.tare()
