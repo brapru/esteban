@@ -21,7 +21,6 @@ uint8_t SPI_SLAVE_Buffer_Tx[BUFFERSIZE];
 static struct command cmd = { 0, 0, 0 };
 
 void initSpiRCC(void){
-       
         /* PCLK2 = HCLK/2 */ 
         RCC_PCLK2Config(RCC_HCLK_Div2);
   
@@ -34,7 +33,6 @@ void initSpiRCC(void){
 
 /* Configure SPI_SLAVE pins: NSS, SCK and MISO */
 void initSpiGPIO(void){
-        
         GPIO_InitTypeDef GPIO_InitStructure;
 
         GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -50,7 +48,6 @@ void initSpiGPIO(void){
 }
 
 void initSpiDMA(void){
-        
         /* SPI_SLAVE_Rx_DMA_Channel configuration */
         DMA_DeInit(SPI_SLAVE_Rx_DMA_Channel);
         DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)SPI_SLAVE_Buffer_Rx;
@@ -92,7 +89,6 @@ void initSpiDMA(void){
 }
 
 void initSpiInterrupt(void){
-
         NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;
         NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 8;
         NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -103,7 +99,6 @@ void initSpiInterrupt(void){
 }
 
 void initSpiSlave(void){
-
         initSpiRCC();
 
         initSpiGPIO();
@@ -142,7 +137,6 @@ void initSpiSlave(void){
 /* === Interrupt Handler Function === */
 
 void resetDMA(void){
-        
         delay_us(20);
         while ((SPI1->SR & SPI_I2S_FLAG_RXNE) != 0) {
                 SPI_I2S_ReceiveData(SPI_SLAVE);
@@ -162,7 +156,6 @@ void resetDMA(void){
 }
 
 void DMA1_Channel2_IRQHandler(void){
-       
         DMA_ClearITPendingBit(DMA1_IT_GL2 | DMA1_IT_TC2 | DMA1_IT_HT2 | DMA1_IT_TE2);
 
         parseCommand(SPI_SLAVE_Buffer_Rx, &cmd);
@@ -174,7 +167,7 @@ void DMA1_Channel2_IRQHandler(void){
         // TODO: if response required bit set, set TX buffer
                 // Set the TX buffer = device->response;
 
-        // Cleanup and reset
+        /* Cleanup and reset */
         resetDMA();
         resetCommand(&cmd);
 }

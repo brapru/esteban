@@ -10,7 +10,6 @@
 struct controller esteban;
 
 /* === Initialization Fuction Declarations === */
-
 void initController(void){
         createNewDevice(&esteban.pump, PUMPID, OFF, 0, 0, changePumpState, changePumpDirection, changePumpSpeed); 
         createNewDevice(&esteban.led, LEDID, OFF, 0, 0, changeLedState, NULL, NULL);
@@ -25,13 +24,9 @@ int main(void){
         GPIOC->BSRR = GPIO_BSRR_BS13;
 
         initDelay();
-        
         initSpiSlave();
-
         initStepper();
-
         initBoiler();
-
         initController();
 
         while(1){
