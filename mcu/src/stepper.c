@@ -9,7 +9,6 @@ void initStepperRCC(void){
 }
 
 void initStepperTimer(uint16_t frequency, uint16_t duty){
-
         uint32_t Cycles = SystemCoreClock / frequency;
         uint16_t PSC_Value = (uint16_t)(Cycles / MAX_RELOAD + 1);
         uint16_t ARR_Value = (uint16_t)((Cycles + (PSC_Value / 2)) / PSC_Value);
@@ -36,7 +35,6 @@ void initStepperTimer(uint16_t frequency, uint16_t duty){
 }
 
 void initStepperGPIO(void){
-
         GPIO_InitTypeDef GPIO_InitStructure;
         
         GPIO_InitStructure.GPIO_Pin = STEPPER_STEP;
@@ -51,7 +49,6 @@ void initStepperGPIO(void){
 }
 
 void initStepper(void){
-        
         initStepperRCC();
         initStepperGPIO();
         initStepperTimer(1350, 50);
