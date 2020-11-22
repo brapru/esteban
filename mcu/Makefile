@@ -70,12 +70,9 @@ $(BINDIR)/$(TARGET).bin: $(BINDIR)/$(TARGET).elf
 	@$(BIN) -S -O binary $< $@
 	@echo "[$(GREEN)*$(NC)] BIN $<"
 	
-	@echo "\n\t${GREEN}===========================================================${NC}"
-	@echo "\t[${GREEN}*${NC}] \t\t$(TARGET) Build Success! \t\t\t[${GREEN}*${NC}]"
-	@echo "\t[$(GREEN)*$(NC)] Run $(ORANGE)\"make flash\"$(NC) to flash to the MCU via ST-LINK.   [$(GREEN)*$(NC)]"	
-	@echo "\t[$(ORANGE)*$(NC)] $(ORANGE)Note:$(NC) You may need to run $(ORANGE)\"make erase\"$(NC) to clear     [$(ORANGE)*$(NC)]" 
-	@echo "\t[$(ORANGE)*$(NC)] the MCU before flashing. 				[$(ORANGE)*$(NC)]"
-	@echo "\t${GREEN}===========================================================${NC}\n"
+	@echo "\n[${GREEN}*${NC}] $(TARGET) build success"
+	@echo "[$(GREEN)*$(NC)] Run $(ORANGE)\"make flash\"$(NC) to flash to the MCU via ST-LINK."	
+	@echo "[$(ORANGE)*$(NC)] $(ORANGE)Note:$(NC) You may need to run $(ORANGE)\"make erase\"$(NC) to clear the MCU before flashing."
 
 $(BINDIR)/$(TARGET).elf: $(OBJECTS) 
 	@$(CC) $(LFLAGS) $^ -o $@ 
@@ -93,9 +90,8 @@ $(OBJDIR)/%.o: %.s
 
 clean:
 	@rm -rf $(BINDIR)/*.elf $(BINDIR)/*.bin $(OBJDIR)
-	@echo "\t${ORANGE}===========================================${NC}"
-	@echo "\t[${GREEN}*${NC}] \t\tAll Cleaned Up \t\t[${GREEN}*${NC}]"
-	@echo "\t${ORANGE}===========================================${NC}\n"
+	@echo "[${GREEN}*${NC}] rm -rf *.elf *.bin *.o"
+	@echo "[${GREEN}*${NC}] Cleaned up esteban environment"
 
 update:
 	$(MAKE) erase && $(MAKE) clean && $(MAKE) && $(MAKE) flash
