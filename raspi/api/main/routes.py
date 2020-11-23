@@ -31,6 +31,5 @@ def scale():
 @socketio.on('connect', namespace='/pour')
 def pour():
     brew = Pour()
-
     global pour_thread
     pour_thread = socketio.start_background_task(brew.pour) 
