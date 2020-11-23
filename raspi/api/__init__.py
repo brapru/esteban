@@ -49,4 +49,7 @@ temp_thread = Thread()
 temp_stop_event = Event()
 tempsensor = DS18B20("F") 
 
+pour_thread = Thread()
+pour_stop_event = Event()
+
 socketio = SocketIO()

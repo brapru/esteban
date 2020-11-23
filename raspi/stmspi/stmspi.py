@@ -1,6 +1,9 @@
 import spidev
 import struct
 
+ON = 1
+OFF = 0
+
 class RpiController:
 
     def __init__(self, channel):
@@ -65,3 +68,6 @@ class RpiController:
     def setDeviceSpeed(self, device, updated_speed):
         device.update(speed=updated_speed)
         self.sendToMCU(self.__UPDATE, device["id"], self.__SPEED, device["speed"])
+
+    def boiler_on(self):
+        self.setDeviceState(self.boiler, ON)
