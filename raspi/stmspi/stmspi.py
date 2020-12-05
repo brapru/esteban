@@ -70,4 +70,13 @@ class RpiController:
         self.sendToMCU(self.__UPDATE, device["id"], self.__SPEED, device["speed"])
 
     def boiler_on(self):
-        self.setDeviceState(self.boiler, ON)
+        self.setDeviceState(self.boiler, 0)
+
+    def boiler_off(self):
+        self.setDeviceState(self.boiler, 1)
+
+    def pump_on(self):
+        self.setDeviceState(self.peristaltic, ON)
+    
+    def pump_off(self):
+        self.setDeviceState(self.peristaltic, OFF)
