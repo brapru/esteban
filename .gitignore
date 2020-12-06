@@ -1,0 +1,17 @@
+
+*.o
+*.bin
+
+*.db
+
+*.bak
+*.log
+
+*.pyc
+__pycache__/
+venv/
+
+dist/
+node_modules/
+
+mcu/bin/
