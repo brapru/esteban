@@ -59,10 +59,12 @@ def main():
             rpi.setDeviceDirection(rpi.peristaltic, COUNTER)
     
         elif ledstate == "boil on":
-            rpi.setDeviceState(rpi.boiler, ON)
+            rpi.boiler_on()
+            #rpi.setDeviceState(rpi.boiler, ON)
 
         elif ledstate == "boil off":
-            rpi.setDeviceState(rpi.boiler, OFF)
+            rpi.boiler_off()
+            #rpi.setDeviceState(rpi.boiler, OFF)
         
         else:
             numb = 0
