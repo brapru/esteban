@@ -75,6 +75,7 @@ $(BINDIR)/$(TARGET).bin: $(BINDIR)/$(TARGET).elf
 	@echo "[$(ORANGE)*$(NC)] $(ORANGE)Note:$(NC) You may need to run $(ORANGE)\"make erase\"$(NC) to clear the MCU before flashing."
 
 $(BINDIR)/$(TARGET).elf: $(OBJECTS) 
+	@mkdir -p $(BINDIR)
 	@$(CC) $(LFLAGS) $^ -o $@ 
 	@echo "[$(GREEN)*$(NC)] CC $<"
 
@@ -89,7 +90,8 @@ $(OBJDIR)/%.o: %.s
 	@echo "[$(GREEN)*$(NC)] AS $<"
 
 clean:
-	@rm -rf $(BINDIR)/*.elf $(BINDIR)/*.bin $(OBJDIR)
+	@echo "[${GREEN}*${NC}] rm -rf $(BINDIR) $(OBJDIR)"
+	@rm -rf $(BINDIR) $(OBJDIR)
 	@echo "[${GREEN}*${NC}] rm -rf *.elf *.bin *.o"
 	@echo "[${GREEN}*${NC}] Cleaned up esteban environment"
 
