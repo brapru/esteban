@@ -1,8 +1,8 @@
 import time
 
 from threading import Thread, Event
-
 from api import hx, tempsensor, rpi, socketio, pour_stop_event
+from utils import get_hx_weight, get_tempsensor
 
 class Pour:
     def __init__(self, weight):
@@ -16,16 +16,16 @@ class Pour:
 
         self.data = {
                 "message": self.message,
-                "temperature": self.get_temp(),
-                "weight": self.get_weight(),
+                "temperature": get_tempsensor(),
+                "weight": get_hx_weight(),
                 "timer": self.timer
             }
 
     def update_pour_data(self):
         self.data = {
                 "message": self.message,
-                "temperature": self.get_temp(),
-                "weight": self.get_weight(),
+                "temperature": get_tempsensor(),
+                "weight": get_hx_weight(),
                 "timer": self.timer,
             }
         return self.data
@@ -49,18 +49,12 @@ class Pour:
     def set_client_message(self, message):
         self.message = message 
     
-    def get_weight(self):
-        return max(0, int(hx.get_weight(5)))
-
-    def get_temp(self):
-        return max(0, int(tempsensor.get_water_temp())) 
-
     def boil_water(self):
         self.set_client_message("heating")
         time.sleep(3)
         rpi.boiler_on()
        
-        while self.t_temp > self.get_temp():
+        while self.t_temp > get_tempsensor():
             continue
 
         rpi.boiler_off()
@@ -73,7 +67,7 @@ class Pour:
         # 2g Coffee : 1g Water
         t_weight = 2 * self.weight 
 
-        while t_weight > self.get_weight():
+        while t_weight > get_hx_weight():
             continue
 
         self.set_client_message("blooming")
@@ -87,7 +81,7 @@ class Pour:
         rpi.pump_on()
         
         t_weight = 600
-        while t_weight > self.get_weight():
+        while t_weight > get_hx_weight():
             continue
 
         self.set_client_message("cheers")
@@ -98,7 +92,7 @@ class Pour:
         self.thread = socketio.start_background_task(self.emit_pour_data)
         time.sleep(3)
         
-        if self.t_temp > self.get_temp():
+        if self.t_temp > get_tempsensor():
             self.boil_water()
 
         self.bloom()
