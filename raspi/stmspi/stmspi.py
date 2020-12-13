@@ -61,6 +61,9 @@ class RpiController:
         self._sendToMCU(self.__UPDATE, device["id"], self.__STATE, device["state"])
     
     def _setDeviceDirection(self, device, updated_direction):
+        if device["id"] != self.pump["id"]:
+            raise AssertionError("Invalid device. Device does not have attribute: direction")
+        
         if updated_direction != 0 and updated_direction != 1:
             raise ValueError("Invalid direction. Device can only be CLOCK(1) OR COUNTER(0)")
         

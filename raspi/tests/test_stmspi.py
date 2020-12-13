@@ -22,18 +22,18 @@ class TestRpiController:
         assert rpi.boiler == { "id" : 3, "state" : OFF }
 
     def test_get_device_status(self, rpi):
-        assert rpi.getDeviceStatus(rpi.led) == { "id" : 1, "state" : OFF }
-        assert rpi.getDeviceStatus(rpi.pump) == { "id" : 2, "state" : OFF, "direction" : 0, "speed" : 0 }
-        assert rpi.getDeviceStatus(rpi.boiler) == { "id" : 3, "state" : OFF }
-
         rpi._setDeviceState(rpi.led, ON)
         rpi._setDeviceState(rpi.pump, ON)
         rpi._setDeviceSpeed(rpi.pump, 2)
         rpi._setDeviceState(rpi.boiler, BOIL_ON)
 
-        assert rpi.getDeviceStatus(rpi.led) == { "id" : 1, "state" : ON }
-        assert rpi.getDeviceStatus(rpi.pump) == { "id" : 2, "state" : ON, "direction" : 0, "speed" : 2 }
-        assert rpi.getDeviceStatus(rpi.boiler) == { "id" : 3, "state" : BOIL_ON }
+        expected_led = rpi.led
+        expected_pump = rpi.pump
+        expected_boiler = rpi.boiler
+
+        assert rpi.getDeviceStatus(rpi.led) == expected_led
+        assert rpi.getDeviceStatus(rpi.pump) == expected_pump
+        assert rpi.getDeviceStatus(rpi.boiler) == expected_boiler
     
     def test_set_device_state_boiler(self, rpi):
         with pytest.raises(ValueError):
