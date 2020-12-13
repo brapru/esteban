@@ -1,7 +1,7 @@
 import time
 
 from threading import Thread, Event
-from api import hx, tempsensor, rpi, socketio, pour_stop_event
+from api import rpi, socketio, pour_stop_event
 from utils import get_hx_weight, get_tempsensor
 
 class Pour:

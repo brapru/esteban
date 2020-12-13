@@ -28,7 +28,7 @@ void initBoiler(void){
         initBoilerGPIO();
 
         /* Boiler should be off on initialization */
-        GPIO_WriteBit(GPIOB, BOILER_GPIO, Bit_SET);
+        GPIO_WriteBit(GPIOB, BOILER_GPIO, BOILER_OFF);
 };
 
 /* Callback Functions  */

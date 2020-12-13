@@ -5,10 +5,10 @@ from flask_socketio import SocketIO
 from threading import Thread, Event
 
 import stmspi.stmspi as stm
-from loadcell.hx711 import HX711
 from tempsensor.ds18b20 import DS18B20
 
 def init_hx():
+    from loadcell.hx711 import HX711
     hx = HX711(5,6)
     
     hx.set_reading_format("MSB", "MSB")
