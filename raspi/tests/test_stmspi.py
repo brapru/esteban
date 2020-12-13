@@ -21,6 +21,20 @@ class TestRpiController:
         assert rpi.pump == { "id" : 2, "state" : OFF, "direction" : 0, "speed" : 0 }
         assert rpi.boiler == { "id" : 3, "state" : OFF }
 
+    def test_get_device_status(self, rpi):
+        assert rpi.getDeviceStatus(rpi.led) == { "id" : 1, "state" : OFF }
+        assert rpi.getDeviceStatus(rpi.pump) == { "id" : 2, "state" : OFF, "direction" : 0, "speed" : 0 }
+        assert rpi.getDeviceStatus(rpi.boiler) == { "id" : 3, "state" : OFF }
+
+        rpi._setDeviceState(rpi.led, ON)
+        rpi._setDeviceState(rpi.pump, ON)
+        rpi._setDeviceSpeed(rpi.pump, 2)
+        rpi._setDeviceState(rpi.boiler, BOIL_ON)
+
+        assert rpi.getDeviceStatus(rpi.led) == { "id" : 1, "state" : ON }
+        assert rpi.getDeviceStatus(rpi.pump) == { "id" : 2, "state" : ON, "direction" : 0, "speed" : 2 }
+        assert rpi.getDeviceStatus(rpi.boiler) == { "id" : 3, "state" : BOIL_ON }
+    
     def test_set_device_state_boiler(self, rpi):
         with pytest.raises(ValueError):
             assert rpi._setDeviceState(rpi.boiler, 2)
@@ -37,7 +51,7 @@ class TestRpiController:
 
     def test_set_device_speed_not_pump(self, rpi):
         with pytest.raises(AssertionError):
-            assert rpi._setDeviceSpeed(rpi.pump, 2)
+            assert rpi._setDeviceSpeed(rpi.boiler, 2)
 
     def test_boiler_on(self, rpi):
         rpi.boiler_on()
