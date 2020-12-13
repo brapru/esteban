@@ -53,6 +53,14 @@ class TestRpiController:
         with pytest.raises(AssertionError):
             assert rpi._setDeviceSpeed(rpi.boiler, 2)
 
+    def test_set_device_direction_pump(self, rpi):
+        rpi._setDeviceDirection(rpi.pump, 1)
+        assert rpi.pump["direction"] == 1
+
+    def test_set_device_direction_not_pump(self, rpi):
+        with pytest.raises(AssertionError):
+            assert rpi._setDeviceDirection(rpi.boiler, 1)
+
     def test_boiler_on(self, rpi):
         rpi.boiler_on()
         assert rpi.boiler["state"] == BOIL_ON
