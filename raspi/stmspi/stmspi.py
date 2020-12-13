@@ -7,34 +7,35 @@ BOIL_ON = 0
 BOIL_OFF = 1
 
 class RpiController:
+    STATE = 1
+    SPEED = 2
+    DIR = 3
+
+    UPDATE       = bytes("$","utf-8")
+    INFO         = bytes("*","utf-8")
+    SEPARATOR    = bytes(":","utf-8")
 
     def __init__(self, channel):
         self.spi = spidev.SpiDev()
         self.spi.open(0, channel)
         self.spi.max_speed_hz = 10000
 
-        self.__STATE = 1
-        self.__SPEED = 2
-        self.__DIR = 3
-
-        self.__UPDATE       = bytes("$","utf-8")
-        self.__INFO         = bytes("*","utf-8")
-        self.__SEPARATOR    = bytes(":","utf-8")
-
         self.led            = { "id" : 1, "state" : 0 }
         self.pump           = { "id" : 2, "state" : 0, "direction" : 0, "speed" : 0 }
         self.boiler         = { "id" : 3, "state" : 0 }
 
     def _prepareToSend(self, data):
-        self.data = bytearray(data)
-        while len(self.data) != 11:
-            self.data.append(0xFF)
-        print(len(self.data))
+        command_data = bytearray(data)
+        while len(command_data) != 11:
+            command_data.append(0xFF)
+        
+        return command_data
 
     def _createCommand(self, cmdtype, device, setting, update):
         #device = bytes(device, 'utf-8')
-        data = struct.pack('<cBcBcB', cmdtype, device, self.__SEPARATOR, setting, self.__SEPARATOR, update)
-        self._prepareToSend(data) 
+        data = struct.pack('<cBcBcB', cmdtype, device, self.SEPARATOR, setting, self.SEPARATOR, update)
+        
+        return self._prepareToSend(data) 
 
     def _spiRead(self, msg_len):
         #msg = self.spi.xfer2(list(self.data))
@@ -42,9 +43,9 @@ class RpiController:
         print(msg)
 
     def _spiWrite(self, cmd):
-        self.spi.writebytes(list(self.data))
-        print(self.data)
-        print(list(self.data))
+        self.spi.writebytes(list(cmd))
+        print(cmd)
+        print(list(cmd))
 
     def _sendToMCU(self, cmdtype, device, setting, update):
         cmd = self._createCommand(cmdtype, device, setting, update)
@@ -58,7 +59,7 @@ class RpiController:
             raise ValueError("Invalid state. Device can only be ON(1) OR OFF(0)")
         
         device.update(state=updated_state)
-        self._sendToMCU(self.__UPDATE, device["id"], self.__STATE, device["state"])
+        self._sendToMCU(self.UPDATE, device["id"], self.STATE, device["state"])
     
     def _setDeviceDirection(self, device, updated_direction):
         if device["id"] != self.pump["id"]:
@@ -68,14 +69,14 @@ class RpiController:
             raise ValueError("Invalid direction. Device can only be CLOCK(1) OR COUNTER(0)")
         
         device.update(direction=updated_direction)
-        self._sendToMCU(self.__UPDATE, device["id"], self.__DIR, device["direction"])
+        self._sendToMCU(self.UPDATE, device["id"], self.DIR, device["direction"])
 
     def _setDeviceSpeed(self, device, updated_speed):
         if device["id"] != self.pump["id"]:
             raise AssertionError("Invalid device. Device does not have attribute: speed")
 
         device.update(speed=updated_speed)
-        self._sendToMCU(self.__UPDATE, device["id"], self.__SPEED, device["speed"])
+        self._sendToMCU(self.UPDATE, device["id"], self.SPEED, device["speed"])
 
     def boiler_on(self):
         self._setDeviceState(self.boiler, BOIL_ON)

@@ -16,12 +16,22 @@ from stmspi.stmspi import RpiController
 def rpi():
     return RpiController(0)
 
+@pytest.fixture
+def spidev_instance():
+    return sys.modules["spidev"].SpiDev()
 
 class TestRpiController:
-    def test_init(self, rpi):
+    def test_init(self, rpi, spidev_instance):
         assert rpi.led == {"id": 1, "state": OFF}
         assert rpi.pump == {"id": 2, "state": OFF, "direction": 0, "speed": 0}
         assert rpi.boiler == {"id": 3, "state": OFF}
+        
+        spidev_instance.open.assert_called_with(0, 0)
+        assert spidev_instance.max_speed_hz == 10000
+
+    def test_send_to_mcu(self, rpi, spidev_instance):
+        rpi._sendToMCU(rpi.UPDATE, rpi.pump["id"], rpi.STATE, rpi.pump["direction"])
+        spidev_instance.writebytes.assert_called_once()
 
     def test_get_device_status(self, rpi):
         rpi._setDeviceState(rpi.led, ON)
