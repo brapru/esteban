@@ -32,13 +32,11 @@ class RpiController:
         return command_data
 
     def _createCommand(self, cmdtype, device, setting, update):
-        #device = bytes(device, 'utf-8')
         data = struct.pack('<cBcBcB', cmdtype, device, self.SEPARATOR, setting, self.SEPARATOR, update)
         
         return self._prepareToSend(data) 
 
     def _spiRead(self, msg_len):
-        #msg = self.spi.xfer2(list(self.data))
         msg = self.spi.readbytes(msg_len)
         print(msg)
 
