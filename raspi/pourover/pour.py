@@ -9,7 +9,7 @@ class Pour:
     def __init__(self, weight):
         self.t_temp = 150
         self.weight = weight
-        self.message = "starting a fresh brew"
+        self.message = "starting fresh brew"
         self.timer = ""
 
         self.thread = Thread()
