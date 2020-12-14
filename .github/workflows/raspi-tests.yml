@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - 'raspi-**'
+  pull_request:
+    branches:
+      - development
+      - master
 
 jobs:
   build:
