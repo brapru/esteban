@@ -85,7 +85,7 @@ class TestRpiController:
         rpi.pump_direction(direction)
         assert rpi.pump["direction"] == direction
         spidev_instance.writebytes.assert_called_with([36, 2, 58, 3, 58, direction, 255, 255, 255, 255, 255])
-    
+
     @pytest.mark.parametrize('direction', [-1, 2, 1.2, 5, "invalid direction"])
     def test_pump_speed_invalid(self, rpi, spidev_instance, direction):
         with pytest.raises(ValueError):
