@@ -49,9 +49,6 @@ class RpiController:
         cmd = self._createCommand(cmdtype, device, setting, update)
         self._spiWrite(cmd)
 
-    def getDeviceStatus(self, device):
-        return device
-
     def _setDeviceState(self, device, updated_state):
         if updated_state != 0 and updated_state != 1:
             raise ValueError("Invalid state. Device can only be ON(1) OR OFF(0)")
@@ -76,6 +73,9 @@ class RpiController:
         device.update(speed=updated_speed)
         self._sendToMCU(self.UPDATE, device["id"], self.SPEED, device["speed"])
 
+    def getDeviceStatus(self, device):
+        return device
+
     def boiler_on(self):
         self._setDeviceState(self.boiler, BOIL_ON)
 
@@ -87,3 +87,21 @@ class RpiController:
     
     def pump_off(self):
         self._setDeviceState(self.pump, OFF)
+
+    def pump_speed(self, speed):
+        if not isinstance(speed, int):
+            raise ValueError("Invalid speed. pump_speed expects speed of type <int>")
+
+        if not 0 <= speed <= 2:
+            raise ValueError("Invalid speed. Pump only supports LOW, MED, HIGH speeds.")
+        
+        self._setDeviceSpeed(self.pump, speed)
+
+    def pump_direction(self, direction):
+        if not isinstance(direction, int):
+            raise ValueError("Invalid direction. pump_speed expects speed of type <int>")
+
+        if not 0 <= direction <= 1:
+            raise ValueError("Invalid direction. Pump only supports CLOCK and COUNTER directions")
+        
+        self._setDeviceDirection(self.pump, direction)
