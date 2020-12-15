@@ -38,16 +38,14 @@ class TestRpiController:
         assert spidev_instance.max_speed_hz == 10000
 
     def test_get_device_status(self, rpi):
-        rpi._setDeviceState(rpi.led, ON)
-        rpi._setDeviceState(rpi.pump, ON)
-        rpi._setDeviceSpeed(rpi.pump, 2)
-        rpi._setDeviceState(rpi.boiler, BOIL_ON)
+        rpi.boiler_on()
+        rpi.pump_on()
+        rpi.pump_speed(HIGH)
+        rpi.pump_speed(COUNTER)
 
-        expected_led = rpi.led
         expected_pump = rpi.pump
         expected_boiler = rpi.boiler
 
-        assert rpi.getDeviceStatus(rpi.led) == expected_led
         assert rpi.getDeviceStatus(rpi.pump) == expected_pump
         assert rpi.getDeviceStatus(rpi.boiler) == expected_boiler
 
