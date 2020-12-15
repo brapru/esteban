@@ -99,7 +99,7 @@ class RpiController:
 
     def pump_direction(self, direction):
         if not isinstance(direction, int):
-            raise ValueError("Invalid direction. pump_speed expects speed of type <int>")
+            raise ValueError("Invalid direction. pump_speed expects direction of type <int>")
 
         if not 0 <= direction <= 1:
             raise ValueError("Invalid direction. Pump only supports CLOCK and COUNTER directions")
