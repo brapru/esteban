@@ -8,12 +8,7 @@ body {
   position: relative;
   color: white;
   height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
-  );
+  background: #FFE637;
   font-family: 'Noto Sans JP', sans-serif;
   overflow-y: hidden;
   display: flex;
@@ -66,9 +61,20 @@ a:hover {
   cursor: pointer;
 }
 
-.Hello {
+.Hola {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+}
+
+.hola {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 40px;
+  line-height: 49px;
+  /* identical to box height */
+  letter-spacing: -1px;
+  color: #18181C;
 }
