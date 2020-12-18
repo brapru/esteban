@@ -68,13 +68,30 @@ a:hover {
   margin: 20px 0;
 }
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url(../assets/fonts/Montserrat/fonts/ttf/Montserrat-Bold.ttf) format('truetype');
+}
+
+.icon {
+  height: 200px;
+  width: 200px;
+}
+
 .hola {
-  font-family: Montserrat;
+  font-family: 'Montserrat';
+  font-weight: 700;
   font-style: normal;
   font-weight: bold;
-  font-size: 40px;
-  line-height: 49px;
+  font-size: 75px;
+  
   /* identical to box height */
+  text-align: center;
   letter-spacing: -1px;
   color: #18181C;
+}
+
+.text {
+  position: fixed;
+  bottom: 0;
 }
